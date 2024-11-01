@@ -25,7 +25,7 @@ def main(to, ofiles, nono, no_duplicates, files):
         service = googleapiclient.discovery.build('drive', 'v3') if not nono else None
 
         def get_files_in_folder():
-            q = "'1DIW_yd5NuW3AUOdrtaTECBNPFBb0zphw' in parents"
+            q = f"'{to}' in parents"
             response = service.files().list(q=q).execute()
             return {file["name"]: file["id"] for file in response["files"]}
 
