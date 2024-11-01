@@ -59,7 +59,7 @@ def main(to, ofiles, nono, no_duplicates, files):
 
         file_ids_by_name = {}
         if no_duplicates:
-            file_ids_by_name = get_files_in_folder()
+            file_ids_by_name = get_files_in_folder(to)
         
         for name, fd in ofiles:
             if no_duplicates and name in file_ids_by_name:
