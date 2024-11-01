@@ -24,9 +24,9 @@ def main(to, ofiles, nono, no_duplicates, files):
     try:
         service = googleapiclient.discovery.build('drive', 'v3') if not nono else None
 
-        def get_files_in_folder(to):
+        def get_files_in_folder():
             q = f"'{to}' in parents"
-            response = service.files().list(q=q).execute()
+            response = service.files().list(supportsAllDrives=True, includeItemsFromAllDrives=True, q=q).execute()
             return {file["name"]: file["id"] for file in response["files"]}
 
         def upload(name, fd):
@@ -44,7 +44,8 @@ def main(to, ofiles, nono, no_duplicates, files):
             media_body = apiclient.http.MediaIoBaseUpload(fd, mimetype='application/octet-stream')
             service.files().create(body=body,
                                    media_body=media_body,
-                                   fields='id').execute()
+                                   fields='id',
+                                   supportsAllDrives=True).execute()
             
         def update(name, id, fd):
             click.echo('Updating existing file: {}'.format(name))
@@ -55,11 +56,12 @@ def main(to, ofiles, nono, no_duplicates, files):
             body = {'name': name}
             media_body = apiclient.http.MediaIoBaseUpload(fd, mimetype='application/octet-stream')
             service.files().update(fileId=id,
-                                   media_body=media_body).execute()
+                                   media_body=media_body,
+                                   supportsAllDrives=True).execute()
 
         file_ids_by_name = {}
         if no_duplicates:
-            file_ids_by_name = get_files_in_folder(to)
+            file_ids_by_name = get_files_in_folder()
         
         for name, fd in ofiles:
             if no_duplicates and name in file_ids_by_name:
