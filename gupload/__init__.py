@@ -5,7 +5,7 @@ import click
 import googleapiclient.discovery
 import os
 
-__version__ = 'v1.2.0'
+__version__ = 'v1.2.1'
 
 
 @click.command()
@@ -25,7 +25,7 @@ def main(to, ofiles, nono, no_duplicates, files):
         service = googleapiclient.discovery.build('drive', 'v3') if not nono else None
 
         def get_files_in_folder():
-            q = "'1DIW_yd5NuW3AUOdrtaTECBNPFBb0zphw' in parents"
+            q = "'1QAWeW21cQy1bdgWv5JWBFkPt5w8dWPxx' in parents"
             response = service.files().list(q=q).execute()
             return {file["name"]: file["id"] for file in response["files"]}
 
